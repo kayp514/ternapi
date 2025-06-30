@@ -8,7 +8,7 @@ export async function POST(request: Request) {
         const { idToken, csrfToken } = body;
         
         const cookieStore = await cookies();
-        const cookieCsrfToken = cookieStore.get('csrfToken')?.value;
+        const cookieCsrfToken = cookieStore.get('__session_terncf')?.value;
 
         if (!idToken) {
             return NextResponse.json(
