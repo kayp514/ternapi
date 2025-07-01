@@ -3,7 +3,20 @@ import { cookies } from 'next/headers';
 import { createSessionCookie } from '../../utils/sessionTernSecure';
 import { setCorsHeaders } from '../../utils/cors';
 
+export async function GET(request: Request) {
+  return new Response('Hello, Next.js!', {
+    status: 200,
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+      'Access-Control-Allow-Headers': 'Content-Type, Authorization, X-CSRF-Token',
+    },
+  })
+}
+
 export async function POST(request: Request) {
+    const response = NextResponse.next()
+    setCorsHeaders(response);
     try {
         const body = await request.json();
         const { idToken, csrfToken } = body;
@@ -12,72 +25,68 @@ export async function POST(request: Request) {
         const cookieCsrfToken = cookieStore.get('__session_terncf')?.value;
 
         if (!idToken) {
-            const response = NextResponse.json(
+            const res = NextResponse.json(
                 { success: false, message: 'ID token is required' },
                 { status: 400 }
             );
-            return setCorsHeaders(response);
+
+            return setCorsHeaders(res);
         }
 
         if (!csrfToken) {
-            const response = NextResponse.json(
+            return NextResponse.json(
                 { success: false, message: 'CSRF token is required' },
                 { status: 400 }
             );
-            return setCorsHeaders(response);
         }
 
         if (!cookieCsrfToken) {
-            const response = NextResponse.json(
+            return NextResponse.json(
                 { success: false, message: 'CSRF token not found in cookies' },
                 { status: 403 }
             );
-            return setCorsHeaders(response);
         }
 
+
         if (csrfToken !== cookieCsrfToken) {
-            const response = NextResponse.json(
+            return NextResponse.json(
                 { success: false, message: 'CSRF token mismatch' },
                 { status: 403 }
             );
-            return setCorsHeaders(response);
         }
 
         const result = await createSessionCookie(idToken);
 
         if (result.success) {
-            const response = NextResponse.json(
+            return NextResponse.json(
                 { success: true, message: result.message },
                 { status: 200 }
             );
-            return setCorsHeaders(response);
         } else {
-            const response = NextResponse.json(
+            return NextResponse.json(
                 { success: false, message: result.message },
                 { status: 401 }
             );
-            return setCorsHeaders(response);
         }
 
     } catch (error) {
         console.error('Error in session POST route:', error);
         if (error instanceof SyntaxError) {
-            const response = NextResponse.json(
+            return NextResponse.json(
                 { success: false, message: 'Invalid JSON in request body' },
                 { status: 400 }
             );
-            return setCorsHeaders(response);
         }
 
-        const response = NextResponse.json(
+        return NextResponse.json(
             { success: false, message: 'Internal server error' },
             { status: 500 }
         );
-        return setCorsHeaders(response);
     }
 }
 
 export async function OPTIONS(request: NextRequest) {
-    const response = new NextResponse(null, { status: 200 });
-    return setCorsHeaders(response);
+  const response = new NextResponse(null, { status: 200 });
+  setCorsHeaders(response);
+  return response;
 }
