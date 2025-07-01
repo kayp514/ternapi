@@ -1,8 +1,10 @@
 'use server'
 
 import { cookies } from 'next/headers';
+import { NextRequest } from 'next/server'
 import { adminTernSecureAuth as adminAuth } from '../utils/admin-init';
 import { handleFirebaseAuthError, type AuthErrorResponse } from '../errors';
+import { url } from 'inspector';
 
 interface FirebaseAuthError extends Error {
   code?: string;
@@ -25,10 +27,12 @@ interface TernVerificationResult extends User {
   error?: AuthErrorResponse
 }
 
-export async function createSessionCookie(idToken: string) {
+export async function createSessionCookie(idToken: string, requestOrigin?: string ) {
   try {
     const expiresIn = 60 * 60 * 24 * 5 * 1000;
       const sessionCookie = await adminAuth.createSessionCookie(idToken, { expiresIn });
+      const url = new URL(requestOrigin || '')
+      const hostname = url.hostname;
 
       const cookieStore = await cookies();
       cookieStore.set('_session_cookie', sessionCookie, {
@@ -36,6 +40,8 @@ export async function createSessionCookie(idToken: string) {
           httpOnly: true,
           secure: process.env.NODE_ENV === 'production',
           path: '/',
+          sameSite: 'none',
+          domain: hostname,
       });
       return { success: true, message: 'Session created' };
   } catch (error) {

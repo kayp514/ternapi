@@ -28,7 +28,8 @@ export async function POST(request: NextRequest) {
 
 
 
-        const result = await createSessionCookie(idToken);
+        const origin = request.headers.get('origin');
+        const result = await createSessionCookie(idToken, origin || undefined);
 
         if (result.success) {
             return setCorsHeaders(
