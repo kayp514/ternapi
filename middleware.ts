@@ -4,7 +4,7 @@ const allowedOrigins = ['https://ternauth-test.vercel.app/']
  
 const corsOptions = {
   'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
-  'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+  'Access-Control-Allow-Headers': 'Content-Type, Authorization, X-CSRF-Token',
 }
  
 export function middleware(request: NextRequest) {
