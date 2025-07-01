@@ -72,9 +72,3 @@ export async function POST(request: Request) {
         );
     }
 }
-
-export async function OPTIONS(request: NextRequest) {
-  const response = new NextResponse(null, { status: 200 });
-  setCorsHeaders(response);
-  return response;
-}
