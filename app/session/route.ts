@@ -26,17 +26,7 @@ export async function POST(request: NextRequest) {
             );
         }
 
-        if (!cookieCsrfToken) {
-            return setCorsHeaders(
-                NextResponse.json({ success: false, message: 'CSRF token not found in cookies' }, { status: 403 })
-            );
-        }
 
-        if (csrfToken !== cookieCsrfToken) {
-            return setCorsHeaders(
-                NextResponse.json({ success: false, message: 'CSRF token mismatch' }, { status: 403 })
-            );
-        }
 
         const result = await createSessionCookie(idToken);
 
