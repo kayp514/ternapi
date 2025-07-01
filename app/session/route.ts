@@ -32,9 +32,10 @@ export async function POST(request: NextRequest) {
         const result = await createSessionCookie(idToken, origin || undefined);
 
         if (result.success) {
-            return setCorsHeaders(
-                NextResponse.json({ success: true, message: result.message }, { status: 200 })
-            );
+            let cookieValue = `__session_cookie=${result.sessionCookie}`;
+            const response = NextResponse.json({ success: true, message: result.message }, { status: 200 })
+            response.headers.set('Set-Cookie', cookieValue);
+            return setCorsHeaders(response);
         } else {
             return setCorsHeaders(
                 NextResponse.json({ success: false, message: result.message }, { status: 401 })
