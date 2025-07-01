@@ -57,10 +57,13 @@ export async function POST(request: NextRequest) {
 }
 
 export async function OPTIONS(request: NextRequest) {
+  const allowedOrigins = ['https://ternauth-test.vercel.app', 'http://localhost:3000'];
+  const origin = request.headers.get('origin');
+
   const response = new NextResponse(null, { 
     status: 204,
     headers: {
-      'Access-Control-Allow-Origin': 'https://ternauth-test.vercel.app',
+      'Access-Control-Allow-Origin': origin && allowedOrigins.includes(origin) ? origin: 'https://ternauth-test.vercel.app',
       'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
       'Access-Control-Allow-Headers': 'Content-Type, Authorization, X-CSRF-Token',
       'Access-Control-Allow-Credentials': 'true',
