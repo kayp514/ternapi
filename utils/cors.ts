@@ -5,13 +5,18 @@ import { NextRequest, NextResponse } from 'next/server';
 const rateLimitStore = new Map<string, { count: number; timestamp: number }>();
 
 export function setCorsHeaders(response: NextResponse): NextResponse {
-  response.headers.set('Access-Control-Allow-Origin', process.env.ALLOWED_ORIGIN || 'https://ternauth-test.vercel.app');
-  response.headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-  response.headers.set('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-CSRF-Token');
-  response.headers.set('Access-Control-Allow-Credentials', 'true');
-  response.headers.set('Access-Control-Max-Age', '86400'); // 24 hours
+  const newResponse = NextResponse.next({
+    request: {
+      headers: new Headers(response.headers),
+    },
+  });
 
-  return response;
+  newResponse.headers.set('Access-Control-Allow-Origin', process.env.ALLOWED_ORIGIN || '*');
+  newResponse.headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  newResponse.headers.set('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  newResponse.headers.set('Access-Control-Max-Age', '86400'); // 24 hours
+
+  return newResponse;
 }
 
 export function rateLimit(request: NextRequest, limit: number, windowMs: number): boolean {
