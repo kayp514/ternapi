@@ -20,7 +20,7 @@ export async function POST(request: Request) {
                 { status: 400 }
             );
 
-            return res;
+            return setCorsHeaders(res);
         }
 
         if (!csrfToken) {
