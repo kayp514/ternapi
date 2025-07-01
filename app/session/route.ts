@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { type NextRequest, NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
 import { createSessionCookie } from '../../utils/sessionTernSecure';
 import { setCorsHeaders } from '../../utils/cors';
@@ -11,7 +11,7 @@ export async function POST(request: NextRequest) {
         
         //const cookieStore = await cookies();
         //const cookieCsrfToken = cookieStore.get('__session_terncf')?.value;
-        const cookieCsrfToken = request.cookies.get('__session_terncf')?.value;
+        const cookieCsrfToken = request.cookies.get('__session_terncf');
 
         if (!idToken) {
             return setCorsHeaders(
