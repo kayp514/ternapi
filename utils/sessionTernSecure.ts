@@ -41,7 +41,7 @@ export async function createSessionCookie(idToken: string, requestOrigin?: strin
           secure: process.env.NODE_ENV === 'production',
           path: '/',
           sameSite: 'none',
-          domain: hostname,
+          domain: '.api.ternsecure.com',
       });
       return { success: true, message: 'Session created' };
   } catch (error) {
