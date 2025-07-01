@@ -11,9 +11,10 @@ export function setCorsHeaders(response: NextResponse): NextResponse {
     },
   });
 
-  newResponse.headers.set('Access-Control-Allow-Origin', process.env.ALLOWED_ORIGIN || '*');
+  newResponse.headers.set('Access-Control-Allow-Origin', '*');
   newResponse.headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-  newResponse.headers.set('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  newResponse.headers.set('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-CSRF-Token');
+  newResponse.headers.set('Access-Control-Allow-Credentials', 'true');
   newResponse.headers.set('Access-Control-Max-Age', '86400'); // 24 hours
 
   return newResponse;
