@@ -4,13 +4,14 @@ import { createSessionCookie } from '../../utils/sessionTernSecure';
 import { setCorsHeaders } from '../../utils/cors';
 
 
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
     try {
         const body = await request.json();
         const { idToken, csrfToken } = body;
         
         const cookieStore = await cookies();
-        const cookieCsrfToken = cookieStore.get('__session_terncf')?.value;
+        //const cookieCsrfToken = cookieStore.get('__session_terncf')?.value;
+        const cookieCsrfToken = request.cookies.get('__session_terncf')?.value;
 
         if (!idToken) {
             return setCorsHeaders(
