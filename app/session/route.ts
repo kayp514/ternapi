@@ -12,6 +12,7 @@ export async function POST(request: NextRequest) {
         //const cookieStore = await cookies();
         //const cookieCsrfToken = cookieStore.get('__session_terncf')?.value;
         const cookieCsrfToken = request.cookies.get('__session_terncf');
+        console.log('Cookie CSRF Token:', cookieCsrfToken);
 
         if (!idToken) {
             return setCorsHeaders(
