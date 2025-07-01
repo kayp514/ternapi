@@ -1,6 +1,7 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
 import { createSessionCookie } from '../../utils/sessionTernSecure';
+import { setCorsHeaders } from '../../utils/cors';
 
 export async function POST(request: Request) {
     try {
@@ -67,4 +68,10 @@ export async function POST(request: Request) {
             { status: 500 }
         );
     }
+}
+
+export async function OPTIONS(request: NextRequest) {
+  const response = new NextResponse(null, { status: 200 });
+  setCorsHeaders(response);
+  return response;
 }
