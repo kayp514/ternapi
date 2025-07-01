@@ -5,7 +5,7 @@ import { NextRequest, NextResponse } from 'next/server';
 const rateLimitStore = new Map<string, { count: number; timestamp: number }>();
 
 export function setCorsHeaders(response: NextResponse): NextResponse {
-  response.headers.set('Access-Control-Allow-Origin', 'http://localhost:3000');
+  response.headers.set('Access-Control-Allow-Origin', 'https://ternauth-test.vercel.app');
   response.headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
   response.headers.set('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-CSRF-Token');
   response.headers.set('Access-Control-Allow-Credentials', 'true');
