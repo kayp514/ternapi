@@ -5,6 +5,8 @@ import { setCorsHeaders } from '../../utils/cors';
 
 
 export async function POST(request: Request) {
+    const response = NextResponse.next();
+    setCorsHeaders(response);
     try {
         const body = await request.json();
         const { idToken, csrfToken } = body;
