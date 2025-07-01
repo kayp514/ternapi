@@ -3,20 +3,8 @@ import { cookies } from 'next/headers';
 import { createSessionCookie } from '../../utils/sessionTernSecure';
 import { setCorsHeaders } from '../../utils/cors';
 
-export async function GET(request: Request) {
-  return new Response('Hello, Next.js!', {
-    status: 200,
-    headers: {
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
-      'Access-Control-Allow-Headers': 'Content-Type, Authorization, X-CSRF-Token',
-    },
-  })
-}
 
 export async function POST(request: Request) {
-    const response = NextResponse.next()
-    setCorsHeaders(response);
     try {
         const body = await request.json();
         const { idToken, csrfToken } = body;
@@ -30,7 +18,7 @@ export async function POST(request: Request) {
                 { status: 400 }
             );
 
-            return setCorsHeaders(res);
+            return res;
         }
 
         if (!csrfToken) {
