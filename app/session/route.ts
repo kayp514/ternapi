@@ -79,7 +79,7 @@ export async function OPTIONS(request: NextRequest) {
   const response = new NextResponse(null, { 
     status: 204,
     headers: {
-      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Origin': 'https://ternauth-test.vercel.app',
       'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
       'Access-Control-Allow-Headers': 'Content-Type, Authorization, X-CSRF-Token',
       'Access-Control-Allow-Credentials': 'true',
