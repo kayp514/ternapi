@@ -33,14 +33,23 @@ export async function POST(request: NextRequest) {
         console.log('Session creation result:', result);
 
         if (result.success) {
-            let cookieValue = `__session_cookie=${result.sessionCookie}; Max-Age=${Math.floor(result.expiresIn! / 1000)}; HttpOnly; Path=/; SameSite=None`;
-                        if (process.env.NODE_ENV === 'production') {
-                cookieValue += '; Secure';
+            const cookieOptions = [
+                `__session_cookie=${result.sessionCookie}`,
+                `Max-Age=${Math.floor(result.expiresIn! / 1000)}`,
+                'HttpOnly',
+                'Path=/',
+                'SameSite=None'
+            ];
+
+            if (process.env.NODE_ENV === 'production') {
+                cookieOptions.push('Secure');
             }
-            
+
             if (result.cookieDomain) {
-                cookieValue += `; Domain=${result.cookieDomain}`;
+                cookieOptions.push(`Domain=${result.cookieDomain}`);
             }
+
+            const cookieValue = cookieOptions.join('; ');
             
             const response = NextResponse.json({ success: true, message: result.message }, { status: 200 })
             response.headers.set('Set-Cookie', cookieValue);
