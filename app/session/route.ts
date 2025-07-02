@@ -16,13 +16,15 @@ export async function POST(request: NextRequest) {
 
         if (!idToken) {
             return setCorsHeaders(
-                NextResponse.json({ success: false, message: 'ID token is required' }, { status: 400 })
+                NextResponse.json({ success: false, message: 'ID token is required' }, { status: 400 }), 
+                request
             );
         }
 
         if (!csrfToken) {
             return setCorsHeaders(
-                NextResponse.json({ success: false, message: 'CSRF token is required' }, { status: 400 })
+                NextResponse.json({ success: false, message: 'CSRF token is required' }, { status: 400 }), 
+                request
             );
         }
 
@@ -40,7 +42,7 @@ export async function POST(request: NextRequest) {
                 expiresIn: result.expiresIn
             }, { status: 200 });
             console.log('Response', response);
-            return setCorsHeaders(response);
+            return setCorsHeaders(response, request);
         } else {
             return setCorsHeaders(
                 NextResponse.json({ success: false, message: result.message }, { status: 401 })
