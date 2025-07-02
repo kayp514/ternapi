@@ -16,13 +16,13 @@ export async function POST(request: NextRequest) {
 
         if (!idToken) {
             return setCorsHeaders(
-                NextResponse.json({ success: false, message: 'ID token is required' }, { status: 400 }), request
+                NextResponse.json({ success: false, message: 'ID token is required' }, { status: 400 })
             );
         }
 
         if (!csrfToken) {
             return setCorsHeaders(
-                NextResponse.json({ success: false, message: 'CSRF token is required' }, { status: 400 }), request
+                NextResponse.json({ success: false, message: 'CSRF token is required' }, { status: 400 })
             );
         }
 
@@ -33,30 +33,21 @@ export async function POST(request: NextRequest) {
         console.log('Session creation result:', result);
 
         if (result.success) {
-            const cookieOptions = [
-                `__session_cookie=${result.sessionCookie}`,
-                `Max-Age=${Math.floor(result.expiresIn! / 1000)}`,
-                'HttpOnly',
-                'Path=/',
-                'SameSite=None'
-            ];
-
+            let cookieValue = `__session_cookie=${result.sessionCookie}; Domain=${result.cookieDomain}; Max-Age=${Math.floor(result.expiresIn! / 1000)}; HttpOnly; Path=/; SameSite=None`;
             if (process.env.NODE_ENV === 'production') {
-                cookieOptions.push('Secure');
+                cookieValue += '; Secure';
             }
-
-            if (result.cookieDomain) {
-                cookieOptions.push(`Domain=${result.cookieDomain}`);
-            }
-
-            const cookieValue = cookieOptions.join('; ');
-
+            
+            //if (result.cookieDomain) {
+            //    cookieValue += `; Domain=${result.cookieDomain}`;
+            //}
+            
             const response = NextResponse.json({ success: true, message: result.message }, { status: 200 })
             response.headers.set('Set-Cookie', cookieValue);
-            return setCorsHeaders(response, request);
+            return setCorsHeaders(response);
         } else {
             return setCorsHeaders(
-                NextResponse.json({ success: false, message: result.message }, { status: 401 }), request
+                NextResponse.json({ success: false, message: result.message }, { status: 401 })
             );
         }
 
