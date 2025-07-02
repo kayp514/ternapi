@@ -31,7 +31,7 @@ export async function createSessionCookie(idToken: string, requestOrigin?: strin
       const sessionCookie = await adminAuth.createSessionCookie(idToken, { expiresIn });
       const url = new URL(requestOrigin || '')
       const hostname = url.hostname;
-      const cookieDomain = 'api.ternsecure.com'
+      const cookieDomain = hostname
 
       return {
         success: true,
