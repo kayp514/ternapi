@@ -4,8 +4,23 @@ import { NextRequest, NextResponse } from 'next/server';
 // TODO: replace with Redis.
 const rateLimitStore = new Map<string, { count: number; timestamp: number }>();
 
-export function setCorsHeaders(response: NextResponse): NextResponse {
-  response.headers.set('Access-Control-Allow-Origin', 'https://dev-vogat-v1.vercel.app');
+const allowedOrigins = [
+  'https://dev-vogat-v1.vercel.app',
+  'https://ternauth-test.vercel.app',
+  'http://localhost:3000'
+];
+
+export function setCorsHeaders(response: NextResponse, request?: NextRequest): NextResponse {
+  let allowedOrigin = allowedOrigins[0]; // Default fallback
+  
+  if (request) {
+    const origin = request.headers.get('origin');
+    if (origin && allowedOrigins.includes(origin)) {
+      allowedOrigin = origin;
+    }
+  }
+  
+  response.headers.set('Access-Control-Allow-Origin', allowedOrigin);
   response.headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
   response.headers.set('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-CSRF-Token');
   response.headers.set('Access-Control-Allow-Credentials', 'true');
