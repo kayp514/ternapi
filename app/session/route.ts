@@ -42,10 +42,10 @@ export async function POST(request: NextRequest) {
             //    cookieValue += `; Domain=${result.cookieDomain}`;
             //}
             
-            return new Response('', { status: 200, headers: {'Set-Cookie': cookieValue}})
-            //console.log('Response', response);
-            //response.headers.set('Set-Cookie', cookieValue);
-            //return setCorsHeaders(response);
+            const response = NextResponse.json({ success: true, message: result.message }, { status: 200 })
+            console.log('Response', response);
+            response.headers.set('Set-Cookie', cookieValue);
+            return setCorsHeaders(response);
         } else {
             return setCorsHeaders(
                 NextResponse.json({ success: false, message: result.message }, { status: 401 })
