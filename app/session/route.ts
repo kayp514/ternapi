@@ -8,6 +8,7 @@ export async function POST(request: NextRequest) {
     try {
         const body = await request.json();
         const { idToken, csrfToken } = body;
+        console.log('Request Body:', body);
         
         //const cookieStore = await cookies();
         //const cookieCsrfToken = cookieStore.get('__session_terncf')?.value;
@@ -28,6 +29,7 @@ export async function POST(request: NextRequest) {
             );
         }
 
+        const origin = request.headers.get('origin');
         const result = await createSessionCookie(idToken, origin || undefined);
 
         if (result.success) {
@@ -62,7 +64,7 @@ export async function POST(request: NextRequest) {
 }
 
 export async function OPTIONS(request: NextRequest) {
-  const allowedOrigins = ['https://ternauth-test.vercel.app', 'http://localhost:3000', 'https://dev-vogat-v1.vercel.app'];
+  const allowedOrigins = ['https://ternauth-test.vercel.app', 'http://localhost:3000', 'http://localhost:3001', 'https://dev-vogat-v1.vercel.app'];
   const origin = request.headers.get('origin');
 
   const response = new NextResponse(null, { 

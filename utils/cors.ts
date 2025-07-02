@@ -7,7 +7,8 @@ const rateLimitStore = new Map<string, { count: number; timestamp: number }>();
 const allowedOrigins = [
   'https://dev-vogat-v1.vercel.app',
   'https://ternauth-test.vercel.app',
-  'http://localhost:3000'
+  'http://localhost:3000',
+  'http://localhost:3001'
 ];
 
 export function setCorsHeaders(response: NextResponse, request?: NextRequest): NextResponse {
