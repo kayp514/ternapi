@@ -7,7 +7,7 @@ import { setCorsHeaders } from '../../utils/cors';
 export async function POST(request: NextRequest) {
     try {
         const body = await request.json();
-        const { idToken, csrfToken } = body;
+        const { idToken, csrfToken, origin } = body;
         console.log('Request Body:', body);
         
         //const cookieStore = await cookies();
@@ -29,7 +29,7 @@ export async function POST(request: NextRequest) {
             );
         }
 
-        const origin = request.headers.get('origin');
+        //const origin = request.headers.get('origin');
         const result = await createSessionCookie(idToken, origin || undefined);
 
         if (result.success) {
