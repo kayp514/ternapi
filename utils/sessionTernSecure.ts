@@ -32,6 +32,7 @@ export async function createSessionCookie(idToken: string, requestOrigin?: strin
       const url = new URL(requestOrigin || '')
       const hostname = url.hostname;
       const cookieDomain = hostname
+      console.log('Cookie Domain:', cookieDomain)
 
       return {
         success: true,

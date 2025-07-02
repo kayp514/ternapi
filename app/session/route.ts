@@ -30,6 +30,7 @@ export async function POST(request: NextRequest) {
 
         const origin = request.headers.get('origin');
         const result = await createSessionCookie(idToken, origin || undefined);
+        console.log('Session creation result:', result);
 
         if (result.success) {
             let cookieValue = `__session_cookie=${result.sessionCookie}`;
