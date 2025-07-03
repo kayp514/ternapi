@@ -39,6 +39,7 @@ export async function POST(request: NextRequest) {
                 sessionToken: result.sessionCookie,
                 expiresIn: result.expiresIn
             }, { status: 200 });
+            //response.headers.set('Set-Cookie', `_session_cookie=${result.sessionCookie}; Domain=${result.cookieDomain}; Path=/; HttpOnly; Secure; maxAge=${result.expiresIn}`);
             console.log('Response', response);
             return setCorsHeaders(response, request);
         } else {
