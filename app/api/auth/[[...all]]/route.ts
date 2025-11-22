@@ -33,9 +33,9 @@ function createJsonResponse(
 
 function parseRoute(params?: string[]): ParsedRoute {
   return {
-    namespace: params?.[0],
-    endpoint: params?.[1],
-    subEndpoint: params?.[2],
+    namespace: 'auth',
+    endpoint: params?.[0],
+    subEndpoint: params?.[1],
   };
 }
 
@@ -214,9 +214,9 @@ async function routeSessions(
 async function routeRequest(
   method: HttpMethod,
   request: NextRequest,
-  context: { params: { slug: string[] } },
+  context: { params: { all: string[] } },
 ): Promise<NextResponse> {
-  const { namespace, endpoint, subEndpoint } = parseRoute(context.params.slug);
+  const { namespace, endpoint, subEndpoint } = parseRoute(context.params.all);
 
   if (namespace !== 'auth' || !endpoint) {
     return notFound(request);
@@ -235,7 +235,7 @@ export async function OPTIONS(request: NextRequest): Promise<NextResponse> {
 
 export async function GET(
   request: NextRequest,
-  props: { params: Promise<{ slug: string[] }> },
+  props: { params: Promise<{ all: string[] }> },
 ): Promise<NextResponse> {
   const params = await props.params;
   return routeRequest('GET', request, { params });
@@ -243,7 +243,7 @@ export async function GET(
 
 export async function POST(
   request: NextRequest,
-  props: { params: Promise<{ slug: string[] }> },
+  props: { params: Promise<{ all: string[] }> },
 ): Promise<NextResponse> {
   const params = await props.params;
   return routeRequest('POST', request, { params });
