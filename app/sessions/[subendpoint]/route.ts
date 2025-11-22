@@ -8,9 +8,9 @@ import {
 } from '../../../utils/sessionTernSecure';
 
 type RouteContext = {
-  params: {
+  params: Promise<{
     subendpoint: string;
-  };
+  }>;
 };
 
 const SESSION_COOKIE_NAME = '_session_cookie';
@@ -126,7 +126,8 @@ export async function OPTIONS(request: NextRequest): Promise<NextResponse> {
   return withCors(request, new NextResponse(null, { status: 204 }));
 }
 
-export async function GET(request: NextRequest, { params }: RouteContext): Promise<NextResponse> {
+export async function GET(request: NextRequest, props: RouteContext): Promise<NextResponse> {
+  const params = await props.params;
   if (params.subendpoint === 'verify') {
     return handleVerifySession(request);
   }
@@ -139,8 +140,9 @@ export async function GET(request: NextRequest, { params }: RouteContext): Promi
 
 export async function POST(
   request: NextRequest,
-  { params }: RouteContext,
+  props: RouteContext,
 ): Promise<NextResponse> {
+  const params = await props.params;
   switch (params.subendpoint) {
     case 'createsession':
       return handleCreateSession(request);

@@ -15,5 +15,6 @@
     "typescript": "^5",
     "@types/node": "^20",
     "@types/react": "^19"
-  }
+  },
+  "packageManager": "npm@11.3.0"
 }

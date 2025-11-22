@@ -11,12 +11,6 @@ import {
 
 const SESSION_COOKIE_NAME = '_session_cookie';
 
-interface RouteContext {
-  params: {
-    slug?: string[];
-  };
-}
-
 type HttpMethod = 'GET' | 'POST';
 
 type ParsedRoute = {
@@ -220,7 +214,7 @@ async function routeSessions(
 async function routeRequest(
   method: HttpMethod,
   request: NextRequest,
-  context: RouteContext,
+  context: { params: { slug: string[] } },
 ): Promise<NextResponse> {
   const { namespace, endpoint, subEndpoint } = parseRoute(context.params.slug);
 
@@ -241,14 +235,16 @@ export async function OPTIONS(request: NextRequest): Promise<NextResponse> {
 
 export async function GET(
   request: NextRequest,
-  context: RouteContext,
+  props: { params: Promise<{ slug: string[] }> },
 ): Promise<NextResponse> {
-  return routeRequest('GET', request, context);
+  const params = await props.params;
+  return routeRequest('GET', request, { params });
 }
 
 export async function POST(
   request: NextRequest,
-  context: RouteContext,
+  props: { params: Promise<{ slug: string[] }> },
 ): Promise<NextResponse> {
-  return routeRequest('POST', request, context);
+  const params = await props.params;
+  return routeRequest('POST', request, { params });
 }
